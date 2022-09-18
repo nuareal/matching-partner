@@ -1,0 +1,142 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A customer-partner matching API.",
+        "title": "Finding Partner",
+        "contact": {
+            "name": "Nuno Areal",
+            "email": "nuno.areal.it@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/matchingPartners": {
+            "post": {
+                "description": "Returns an order list of partners by most recommended.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner"
+                ],
+                "summary": "Get Matching Partners",
+                "parameters": [
+                    {
+                        "description": "Costumer JSON",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Partner"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/partner/{nameId}": {
+            "get": {
+                "description": "Returns info of a given partner.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner"
+                ],
+                "summary": "Get Partner Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Partner nameId",
+                        "name": "nameId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Partner"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Coord": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lon": {
+                    "type": "number"
+                }
+            }
+        },
+        "Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "Earth coordinates",
+                    "$ref": "#/definitions/Coord"
+                },
+                "floorArea": {
+                    "description": "unit: meters",
+                    "type": "number"
+                },
+                "material": {
+                    "description": "available: wood, carpet, tiles",
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "Partner": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/Coord"
+                },
+                "materials": {
+                    "type": "array",
+                    "items": {
+                        "description": "available: wood, carpet, tiles",
+                        "type": "integer"
+                    }
+                },
+                "nameId": {
+                    "type": "string"
+                },
+                "operatingRadius": {
+                    "description": "unit: kilometers",
+                    "type": "number"
+                },
+                "rating": {
+                    "description": "range: [0.0,5]",
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

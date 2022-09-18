@@ -1,0 +1,95 @@
+basePath: /api/v1
+definitions:
+  Coord:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+    type: object
+  Customer:
+    properties:
+      address:
+        $ref: '#/definitions/Coord'
+        description: Earth coordinates
+      floorArea:
+        description: 'unit: meters'
+        type: number
+      material:
+        description: 'available: wood, carpet, tiles'
+        type: integer
+      phoneNumber:
+        type: string
+    type: object
+  Partner:
+    properties:
+      address:
+        $ref: '#/definitions/Coord'
+      materials:
+        items:
+          description: 'available: wood, carpet, tiles'
+          type: integer
+        type: array
+      nameId:
+        type: string
+      operatingRadius:
+        description: 'unit: kilometers'
+        type: number
+      rating:
+        description: 'range: [0.0,5]'
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: nuno.areal.it@gmail.com
+    name: Nuno Areal
+  description: A customer-partner matching API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Finding Partner
+  version: "1.0"
+paths:
+  /matchingPartners:
+    post:
+      description: Returns an order list of partners by most recommended.
+      parameters:
+      - description: Costumer JSON
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Partner'
+            type: array
+      summary: Get Matching Partners
+      tags:
+      - partner
+  /partner/{nameId}:
+    get:
+      description: Returns info of a given partner.
+      parameters:
+      - description: Partner nameId
+        in: path
+        name: nameId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Partner'
+      summary: Get Partner Info
+      tags:
+      - partner
+swagger: "2.0"
